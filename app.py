@@ -25,7 +25,7 @@ if 'checked' not in st.session_state:
     check_all_deadlines(supabase)
     st.session_state['checked'] = True
 
-if 'user' not in st.session_state and 'user' in cookies:
+if 'user' not in st.session_state and cookies.get('user'):
     uid = cookies['user']
     res = supabase.table('users').select("*").eq('id', uid).execute()
     if res.data:
@@ -68,9 +68,10 @@ else:
         st.write(f"**{user['full_name']}** ({user['role']})")
 
         if st.button("Logout", use_container_width=True):
-            del st.session_state["user"]
-            cookies.pop("user", None)
+            cookies['user'] = ""
             cookies.save()
+            if 'user' in st.session_state:
+                del st.session_state['user']
             st.rerun()
 
         
