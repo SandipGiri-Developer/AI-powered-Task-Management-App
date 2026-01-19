@@ -71,9 +71,8 @@ else:
             st.write(f"**{user['full_name']}** ({user['role']})")
 
             if st.button("Logout", use_container_width=True):
-                st.session_state.pop("user", None)
-                cookies.pop("user", None)
-                cookies.save()
+                del st.session_state["user"]
+                cookies.delete("user")
                 st.rerun()
 
         
