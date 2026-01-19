@@ -72,7 +72,9 @@ else:
 
             if st.button("Logout", use_container_width=True):
                 del st.session_state["user"]
-                cookies.delete("user")
+                if "user" in cookies:
+                    cookies.pop("user")
+                cookies.save()
                 st.rerun()
 
         
