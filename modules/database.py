@@ -1,12 +1,10 @@
-import os
+import streamlit as st
 from supabase import create_client, Client
-from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
 from .utils import get_ist_now
 
-load_dotenv()
-url = os.getenv("SUPABASE_URL")
-key = os.getenv("SUPABASE_KEY")
+url = st.secrets["SUPABASE_URL"]
+key = st.secrets["SUPABASE_KEY"]
 supabase = create_client(url, key)
 
 def get_db():

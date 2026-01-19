@@ -1,14 +1,10 @@
 import streamlit as st
 from supabase import create_client, Client
-from dotenv import load_dotenv
 from streamlit_cookies_manager import EncryptedCookieManager
-import os
 
 from modules.database import check_all_deadlines, get_db
 from modules.manager import render_manager_dashboard
 from modules.employee import render_employee_dashboard
-
-load_dotenv()
 
 cookies = EncryptedCookieManager(prefix="task_app", password="secret_key_123")
 if not cookies.ready():

@@ -1,10 +1,8 @@
 streamlit
 supabase-py==2.3.1
-st-supabase-connection
 google-generativeai
 pandas
 plotly
 matplotlib
 streamlit-cookies-manager
 python-dotenv
-supabase
