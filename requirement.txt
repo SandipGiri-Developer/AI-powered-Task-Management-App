@@ -1,0 +1,9 @@
+streamlit
+supabase
+st-supabase-connection
+google-generativeai
+pandas
+plotly
+matplotlib
+streamlit-cookies-manager
+python-dotenv
