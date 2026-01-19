@@ -31,69 +31,35 @@ if 'user' not in st.session_state and 'user' in cookies:
     if res.data:
         st.session_state['user'] = res.data[0]
 
-if "user" not in st.session_state:
-
-    st.markdown(
-        """
-        <style>
-        .center-box {
-            max-width: 420px;
-            margin: auto;
-            padding: 2rem;
-            border-radius: 12px;
-            background: #111;
-            box-shadow: 0 0 15px rgba(0,0,0,0.4);
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown('<div class="center-box">', unsafe_allow_html=True)
-
-    st.title("Login / Signup")
-
-    mode = st.radio(
-        "Mode",
-        ["Login", "Sign Up"],
-        horizontal=True,
-        label_visibility="collapsed"
-    )
-
+if 'user' not in st.session_state:
+    st.title("🔐 Login / Signup")
+    mode = st.radio("", ["Login", "Sign Up"], horizontal=True)
+    
     if mode == "Sign Up":
         name = st.text_input("Full Name")
         email = st.text_input("Email")
         role = st.selectbox("Role", ["manager", "employee"])
-
         if st.button("Register", use_container_width=True):
             try:
-                supabase.table("users").insert({
-                    "email": email,
-                    "full_name": name,
-                    "role": role
+                supabase.table('users').insert({
+                    'email': email,
+                    'full_name': name,
+                    'role': role
                 }).execute()
-
-                st.success("Registered. Switch to login.")
-
+                st.success("✅ Registered! Switch to Login.")
             except Exception as e:
-                st.error(str(e))
-
+                st.error(f"Error: {str(e)}")
     else:
         email = st.text_input("Email")
-
         if st.button("Login", use_container_width=True):
-            resp = supabase.table("users").select("*").eq("email", email).execute()
-
+            resp = supabase.table('users').select("*").eq('email', email).execute()
             if resp.data:
-                st.session_state["user"] = resp.data[0]
-                cookies["user"] = str(resp.data[0]["id"])
+                st.session_state['user'] = resp.data[0]
+                cookies['user'] = str(resp.data[0]['id'])
                 cookies.save()
                 st.rerun()
             else:
                 st.error("User not found")
-
-    st.markdown("</div>", unsafe_allow_html=True)
-
 
 else:
     user = st.session_state['user']
