@@ -65,17 +65,13 @@ else:
     user = st.session_state['user']
     
     with st.sidebar:
-        if "user" in st.session_state:
-            user = st.session_state["user"]
+        st.write(f"**{user['full_name']}** ({user['role']})")
 
-            st.write(f"**{user['full_name']}** ({user['role']})")
-
-            if st.button("Logout", use_container_width=True):
-                del st.session_state["user"]
-                if "user" in cookies:
-                    cookies.pop("user")
-                cookies.save()
-                st.rerun()
+        if st.button("Logout", use_container_width=True):
+            del st.session_state["user"]
+            cookies.pop("user", None)
+            cookies.save()
+            st.rerun()
 
         
         st.divider()
