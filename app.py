@@ -32,7 +32,7 @@ if 'user' not in st.session_state and cookies.get('user'):
         st.session_state['user'] = res.data[0]
 
 if 'user' not in st.session_state:
-    st.title("🔐 Login / Signup")
+    st.title(" Login / Signup")
     mode = st.radio("", ["Login", "Sign Up"], horizontal=True)
     
     if mode == "Sign Up":

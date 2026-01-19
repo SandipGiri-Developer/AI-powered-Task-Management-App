@@ -6,7 +6,7 @@ from .utils import format_datetime_ist
 from .analytics import render_employee_report
 
 def render_manager_dashboard(supabase, manager_id):
-    st.header("📋 Manager Dashboard")
+    st.header("Manager Dashboard")
     
     st.subheader("✨ Assign New Task")
     employees = supabase.table('users').select("*").eq('role', 'employee').execute()
@@ -72,7 +72,7 @@ def render_manager_dashboard(supabase, manager_id):
             if emp_id in emp_details:
                 emp_name = emp_details[emp_id]['full_name']
                 
-                with st.expander(f"📊 {emp_name} - {len(tasks)} tasks"):
+                with st.expander(f" {emp_name} - {len(tasks)} tasks"):
                     col1, col2, col3 = st.columns([2, 1, 1])
                     
                     with col1:

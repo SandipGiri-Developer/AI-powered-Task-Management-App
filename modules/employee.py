@@ -3,14 +3,14 @@ from .database import get_notifications, send_notification
 from .utils import format_datetime_ist
 
 def render_employee_dashboard(supabase, user_id, user_name):
-    st.header("📝 My Tasks")
+    st.header(" My Tasks")
     
     render_alerts_section(supabase, user_id)
     st.divider()
     render_tasks_section(supabase, user_id, user_name)
 
 def render_alerts_section(supabase, user_id):
-    st.subheader("🔔 Your Alerts")
+    st.subheader("Alerts")
     msgs = get_notifications(supabase, user_id)
     
     if msgs:
@@ -36,7 +36,7 @@ def render_tasks_section(supabase, user_id, user_name):
     pending = [t for t in my_tasks if t['status'] == 'pending']
     
     if pending:
-        st.subheader("⏳ Pending Tasks")
+        st.subheader("Pending Tasks...")
         for task in pending:
             render_pending_task(supabase, task, user_name)
     
