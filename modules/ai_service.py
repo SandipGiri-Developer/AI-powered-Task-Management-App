@@ -5,7 +5,7 @@ genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
 def gen_ai_response(prompt: str) -> str:
     try:
-        model = genai.GenerativeModel('gemini-2.5-flash')
+        model = genai.GenerativeModel('gemini-3-flash-preview')
         response = model.generate_content(prompt)
         return response.text
     except Exception as e:
