@@ -7,3 +7,4 @@ plotly
 matplotlib
 streamlit-cookies-manager
 python-dotenv
+supabase
