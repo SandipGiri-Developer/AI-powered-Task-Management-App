@@ -1,18 +1,16 @@
 import streamlit as st
+
+st.set_page_config(page_title="Task Management System", layout="wide")
+
 from supabase import create_client, Client
 from streamlit_cookies_manager import EncryptedCookieManager
-
-from modules.database import check_all_deadlines, get_db
+from modules.database import check_all_deadlines
 from modules.manager import render_manager_dashboard
 from modules.employee import render_employee_dashboard
 
 cookies = EncryptedCookieManager(prefix="task_app", password="secret_key_123")
 if not cookies.ready():
     st.stop()
-
-
-
-st.set_page_config(page_title="Task Management System", layout="wide")
 
 url = st.secrets["SUPABASE_URL"]
 key = st.secrets["SUPABASE_KEY"]
@@ -39,7 +37,7 @@ if 'user' not in st.session_state:
         name = st.text_input("Full Name")
         email = st.text_input("Email")
         role = st.selectbox("Role", ["manager", "employee"])
-        if st.button("Register", use_container_width=True):
+        if st.button("Register", width=True):
             try:
                 supabase.table('users').insert({
                     'email': email,
@@ -51,7 +49,7 @@ if 'user' not in st.session_state:
                 st.error(f"Error: {str(e)}")
     else:
         email = st.text_input("Email")
-        if st.button("Login", use_container_width=True):
+        if st.button("Login", width=True):
             resp = supabase.table('users').select("*").eq('email', email).execute()
             if resp.data:
                 st.session_state['user'] = resp.data[0]
@@ -67,7 +65,7 @@ else:
     with st.sidebar:
         st.write(f"**{user['full_name']}** ({user['role']})")
 
-        if st.button("Logout", use_container_width=True):
+        if st.button("Logout", width=True):
             cookies['user'] = ""
             cookies.save()
             if 'user' in st.session_state:
