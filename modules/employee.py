@@ -61,7 +61,7 @@ def render_pending_task(supabase, task, user_name):
         with col2:
             new_prog = st.slider("Progress", 0, 100, task['progress'], key=f"p_{task['id']}", label_visibility="collapsed")
             
-            if st.button("💾 Save", key=f"s_{task['id']}", use_container_width=True):
+            if st.button("💾 Save", key=f"s_{task['id']}", ):
                 status = 'completed' if new_prog == 100 else 'pending'
                 supabase.table('tasks').update({
                     'progress': new_prog,

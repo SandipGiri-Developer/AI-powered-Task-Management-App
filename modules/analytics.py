@@ -27,7 +27,7 @@ def render_pie_chart(completed, pending):
         )
     ])
     fig.update_layout(height=400, showlegend=True)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, )
 
 def render_progress_line(tasks):
     tasks_with_dates = [(t['created_at'], t['progress']) for t in tasks if t['created_at']]
@@ -45,7 +45,7 @@ def render_progress_line(tasks):
             line_shape='linear'
         )
         fig.update_layout(height=400)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, )
 
 def render_completion_histogram(tasks):
     if not tasks:
@@ -62,7 +62,7 @@ def render_completion_histogram(tasks):
         yaxis_title='Tasks',
         height=400
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, )
 
 def render_status_breakdown(tasks):
     status_counts = {}
@@ -78,7 +78,7 @@ def render_status_breakdown(tasks):
         )
     ])
     fig.update_layout(title='Task Status Breakdown', height=350)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, )
 
 def render_tasks_table(tasks):
     if not tasks:
@@ -95,7 +95,7 @@ def render_tasks_table(tasks):
         for t in tasks
     ])
     
-    st.dataframe(task_df, use_container_width=True, hide_index=True)
+    st.dataframe(task_df, hide_index=True)
 
 def render_matplotlib_histogram(progress_values):
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -129,7 +129,7 @@ def render_performance_gauge(completion_rate):
         }
     ))
     fig.update_layout(height=400)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, )
 
 def render_time_series(tasks):
     tasks_sorted = sorted([t for t in tasks if t['created_at']], key=lambda x: x['created_at'])
@@ -145,10 +145,10 @@ def render_time_series(tasks):
         y=progress,
         title='Task Progress Timeline',
         markers=True,
-        labels={'x': 'Date', 'y': 'Progress %'}
+        labels={'x': 'Date', 'y': 'Progres s %'}
     )
     fig.update_layout(height=400, hovermode='x unified')
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, )
 
 def render_employee_report(supabase, employee_id, employee_name):
     from .database import get_employee_stats

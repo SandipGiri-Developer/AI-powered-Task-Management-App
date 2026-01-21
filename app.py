@@ -37,7 +37,7 @@ if 'user' not in st.session_state:
         name = st.text_input("Full Name")
         email = st.text_input("Email")
         role = st.selectbox("Role", ["manager", "employee"])
-        if st.button("Register", width=True):
+        if st.button("Register"):
             try:
                 supabase.table('users').insert({
                     'email': email,
@@ -65,7 +65,7 @@ else:
     with st.sidebar:
         st.write(f"**{user['full_name']}** ({user['role']})")
 
-        if st.button("Logout", width=True):
+        if st.button("Logout"):
             cookies['user'] = ""
             cookies.save()
             if 'user' in st.session_state:
