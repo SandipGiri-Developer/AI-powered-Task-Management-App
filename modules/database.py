@@ -3,12 +3,15 @@ from supabase import create_client, Client
 from datetime import datetime, timedelta, timezone
 from .utils import get_ist_now
 
-url = st.secrets["SUPABASE_URL"]
-key = st.secrets["SUPABASE_KEY"]
-supabase = create_client(url, key)
+_supabase = None
 
 def get_db():
-    return supabase
+    global _supabase
+    if _supabase is None:
+        url = st.secrets["SUPABASE_URL"]
+        key = st.secrets["SUPABASE_KEY"]
+        _supabase = create_client(url, key)
+    return _supabase
 
 def get_employee_stats(supabase, employee_id, days=15):
     ist = timezone(timedelta(hours=5, minutes=30))
