@@ -49,7 +49,7 @@ if 'user' not in st.session_state:
                 st.error(f"Error: {str(e)}")
     else:
         email = st.text_input("Email")
-        if st.button("Login", width=True):
+        if st.button("Login"):
             resp = supabase.table('users').select("*").eq('email', email).execute()
             if resp.data:
                 st.session_state['user'] = resp.data[0]
