@@ -3,14 +3,14 @@ from .database import get_notifications, send_notification
 from .utils import format_datetime_ist
 
 def render_employee_dashboard(supabase, user_id, user_name):
-    st.header(" My Tasks")
+    st.header("My Tasks")
     
     render_alerts_section(supabase, user_id)
     st.divider()
     render_tasks_section(supabase, user_id, user_name)
 
 def render_alerts_section(supabase, user_id):
-    st.subheader(" Alerts")
+    st.subheader("Alerts")
     msgs = get_notifications(supabase, user_id)
     
     if msgs:
