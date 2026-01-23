@@ -133,5 +133,5 @@ def render_employee_report(supabase, employee_id, employee_name):
     
     st.divider()
     st.markdown("### 🤖 AI Analysis")
-    # ai_analysis = gen_performance_analysis(employee_name, stats)
-    # st.info(ai_analysis)
+    ai_analysis = gen_performance_analysis(employee_name, stats)
+    st.info(ai_analysis)
