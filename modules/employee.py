@@ -10,11 +10,11 @@ def render_employee_dashboard(supabase, user_id, user_name):
     render_tasks_section(supabase, user_id, user_name)
 
 def render_alerts_section(supabase, user_id):
-    st.subheader("Alerts")
+    st.subheader(" Alerts")
     msgs = get_notifications(supabase, user_id)
     
     if msgs:
-        for m in msgs:
+        for m in msgs[:5]:
             if m['message_type'] == 'warning':
                 st.warning(m['content'])
             elif m['message_type'] == 'completion':

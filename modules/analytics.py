@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import plotly.express as px
-import matplotlib.pyplot as plt
-import numpy as np
 from .utils import format_datetime_ist
 
 def render_metrics(stats):
@@ -47,38 +47,8 @@ def render_progress_line(tasks):
         fig.update_layout(height=400)
         st.plotly_chart(fig, )
 
-def render_completion_histogram(tasks):
-    if not tasks:
-        return
-    
-    progress_vals = [t['progress'] for t in tasks]
-    
-    fig = go.Figure(data=[
-        go.Histogram(x=progress_vals, nbinsx=10, marker_color='#3498db')
-    ])
-    fig.update_layout(
-        title='Progress Distribution',
-        xaxis_title='Progress %',
-        yaxis_title='Tasks',
-        height=400
-    )
-    st.plotly_chart(fig, )
 
-def render_status_breakdown(tasks):
-    status_counts = {}
-    for t in tasks:
-        status = t['status'].upper()
-        status_counts[status] = status_counts.get(status, 0) + 1
-    
-    fig = go.Figure(data=[
-        go.Bar(
-            x=list(status_counts.keys()),
-            y=list(status_counts.values()),
-            marker_color=['#2ecc71', '#f39c12', '#e74c3c'][:len(status_counts)]
-        )
-    ])
-    fig.update_layout(title='Task Status Breakdown', height=350)
-    st.plotly_chart(fig, )
+
 
 def render_tasks_table(tasks):
     if not tasks:
@@ -91,6 +61,7 @@ def render_tasks_table(tasks):
             'Status': t['status'].upper(),
             'Progress': f"{t['progress']}%",
             'Due Date': format_datetime_ist(t['due_date']),
+
         }
         for t in tasks
     ])
@@ -131,25 +102,6 @@ def render_performance_gauge(completion_rate):
     fig.update_layout(height=400)
     st.plotly_chart(fig, )
 
-def render_time_series(tasks):
-    tasks_sorted = sorted([t for t in tasks if t['created_at']], key=lambda x: x['created_at'])
-    
-    if not tasks_sorted:
-        return
-    
-    dates = [pd.to_datetime(t['created_at']) for t in tasks_sorted]
-    progress = [t['progress'] for t in tasks_sorted]
-    
-    fig = px.line(
-        x=dates,
-        y=progress,
-        title='Task Progress Timeline',
-        markers=True,
-        labels={'x': 'Date', 'y': 'Progres s %'}
-    )
-    fig.update_layout(height=400, hovermode='x unified')
-    st.plotly_chart(fig, )
-
 def render_employee_report(supabase, employee_id, employee_name):
     from .database import get_employee_stats
     from .ai_service import gen_performance_analysis
@@ -169,8 +121,17 @@ def render_employee_report(supabase, employee_id, employee_name):
         progress_vals = [t['progress'] for t in stats['tasks']]
         if progress_vals:
             render_matplotlib_histogram(progress_vals)
+
+    st.divider()
+    col1, col2 = st.columns(2)
+    with col1:
+        if stats['tasks']:
+            render_performance_gauge(stats['completion_rate'])
+    with col2:
+        if stats['tasks']:
+            render_progress_line(stats['tasks'])      
     
     st.divider()
     st.markdown("### 🤖 AI Analysis")
-    ai_analysis = gen_performance_analysis(employee_name, stats)
-    st.info(ai_analysis)
+    # ai_analysis = gen_performance_analysis(employee_name, stats)
+    # st.info(ai_analysis)

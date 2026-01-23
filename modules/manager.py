@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from collections import defaultdict
 from .database import get_employee_stats, send_notification
 from .utils import format_datetime_ist
-from .analytics import render_employee_report
+from .analytics import render_employee_report,render_tasks_table
 
 def render_manager_dashboard(supabase, manager_id):
     st.header("Manager Dashboard")
@@ -33,6 +33,7 @@ def render_manager_dashboard(supabase, manager_id):
             ist = timezone(timedelta(hours=5, minutes=30))
             due_datetime = datetime.combine(due_date, due_time)
             due_datetime_ist = ist.localize(due_datetime) if hasattr(ist, 'localize') else due_datetime.replace(tzinfo=ist)
+    
             
             task_data = {
                 'title': title, 
@@ -51,9 +52,12 @@ def render_manager_dashboard(supabase, manager_id):
 
     st.divider()
     
+
     st.subheader("👥 Team Progress & Reports")
     team_response = supabase.table('tasks').select("*").eq('assigned_by', manager_id).execute()
     team_tasks = team_response.data or []
+    st.subheader("📊 Team Tasks")
+    render_tasks_table(team_tasks)
     
     if team_tasks:
         emp_tasks = defaultdict(list)
