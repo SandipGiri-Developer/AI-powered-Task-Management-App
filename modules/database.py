@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 from .utils import get_ist_now
 
 _supabase = None
-
+#getting single supabse client
 def get_db():
     global _supabase
     if _supabase is None:

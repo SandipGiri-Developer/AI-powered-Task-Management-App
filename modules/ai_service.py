@@ -1,15 +1,18 @@
 import streamlit as st
 import google.generativeai as genai
 
-genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
-def gen_ai_response(prompt: str) -> str:
+genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+def gen_ai_response(prompt: str):
     try:
         model = genai.GenerativeModel('gemini-3-flash-preview')
-        response = model.generate_content(prompt)
-        return response.text
+        response = model.generate_content(prompt, stream=True)
+        for chunk in response:
+            if chunk.text:
+                yield chunk.text
+                
     except Exception as e:
-        return f"Error generating response: {str(e)}"
+        yield f"Error generating response: {str(e)}"
 
 def gen_performance_analysis(emp_name: str, stats: dict) -> str:
     prompt = f"""
