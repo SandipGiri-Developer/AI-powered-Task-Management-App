@@ -3,6 +3,8 @@ import os
 from datetime import datetime
 import requests
 import google.generativeai as genai
+from dotenv import load_dotenv
+load_dotenv()
 
 
 try:
@@ -14,10 +16,10 @@ except Exception as e:
 
 app = FastAPI()
 
-MANAGER_TELEGRAM_ID = 5035988742
-MANAGER_USER_ID = "fffa5e7a-d962-4cc1-82a7-f8f650019cf4"
-TELEGRAM_BOT_TOKEN = "8184304138:AAGkop_wCj6t5V0jm55PD4MuipW3rcc13QU"
-GEMINI_API_KEY_FLASH = "AIzaSyC4_tGKr8ut75g-ErCNPMlHmUTB59HucmE"
+MANAGER_TELEGRAM_ID = int(os.getenv("MANAGER_TELEGRAM_ID"))
+MANAGER_USER_ID = os.getenv("MANAGER_USER_ID")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+GEMINI_API_KEY_FLASH = os.getenv("GEMINI_API_KEY_FLASH")
 
 genai.configure(api_key=GEMINI_API_KEY_FLASH)
 
