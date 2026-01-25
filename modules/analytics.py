@@ -68,6 +68,8 @@ def render_tasks_table(tasks):
     
     st.dataframe(task_df, hide_index=True)
 
+    
+
 def render_matplotlib_histogram(progress_values):
     fig, ax = plt.subplots(figsize=(10, 5))
     ax.hist(progress_values, bins=10, color='#3498db', edgecolor='black', alpha=0.7)

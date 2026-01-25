@@ -16,7 +16,6 @@ supabase = get_db()
 
 check_all_deadlines(supabase)
 
-
 if 'checked' not in st.session_state:
     check_all_deadlines(supabase)
     st.session_state['checked'] = True

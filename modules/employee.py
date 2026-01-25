@@ -1,6 +1,7 @@
 import streamlit as st
 from .database import get_notifications, send_notification
 from .utils import format_datetime_ist
+import time
 
 def render_employee_dashboard(supabase, user_id, user_name):
     st.header("My Tasks")
@@ -10,15 +11,17 @@ def render_employee_dashboard(supabase, user_id, user_name):
     render_tasks_section(supabase, user_id, user_name)
 
 def render_alerts_section(supabase, user_id):
-    st.subheader("Alerts")
+    st.subheader(" Alerts ")
     msgs = get_notifications(supabase, user_id)
     
     if msgs:
-        for m in msgs[:5]:
+        for m in msgs[:5]:  # Show newest 5 first (already ordered desc by DB query)
             if m['message_type'] == 'warning':
                 st.warning(m['content'])
             elif m['message_type'] == 'completion':
                 st.success(m['content'])
+            elif m['message_type'] == 'task_edited':
+                st.warning(f"✏️ {m['content']}")
             else:
                 st.info(m['content'])
     else:

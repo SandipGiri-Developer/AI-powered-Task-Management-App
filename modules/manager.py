@@ -2,8 +2,12 @@ import streamlit as st
 from datetime import datetime, timedelta, timezone
 from collections import defaultdict
 from .database import get_employee_stats, send_notification
-from .utils import format_datetime_ist
+from .utils import format_datetime_ist, to_ist_timestamp
 from .analytics import render_employee_report,render_tasks_table
+from .database import get_db
+import pandas as pd
+
+supabse = get_db()
 
 def render_manager_dashboard(supabase, manager_id):
     st.header("Manager Dashboard")
@@ -11,11 +15,68 @@ def render_manager_dashboard(supabase, manager_id):
     st.subheader("✨ Assign New Task")
     employees = supabase.table('users').select("*").eq('role', 'employee').execute()
     emp_options = {e['full_name']: e['id'] for e in employees.data} if employees.data else {}
-    
+    emp_names = {e['id'] : e['full_name'] for e in employees.data} if employees.data else {}
     if not emp_options:
         st.warning("No employees found. Create employee accounts first.")
         return
     
+    
+    st.subheader("Edit Completed Tasks")
+    completed_resp = supabase.table('tasks').select("*").eq('status', 'completed').eq('assigned_by', manager_id).execute()
+    completed_tasks = completed_resp.data or []
+
+    if not completed_tasks:
+        st.info("No completed tasks to edit.")
+    else:
+        task_options = {f"{t.get('title','Untitled')} (Employee name:{emp_names[t.get('assigned_to')]})": t for t in completed_tasks}
+        selected_label = st.selectbox("Select completed task to edit", list(task_options.keys()))
+        task = task_options[selected_label]
+
+        with st.form(f"edit_task_{task.get('id')}"):
+            col1, col2 = st.columns(2)
+            with col1:
+                new_title = st.text_input("Title", value=task.get('title', ''))
+                new_status = st.selectbox("Status", ['completed', 'in_progress', 'pending'], index=0 if task.get('status') == 'completed' else (1 if task.get('status') == 'in_progress' else 2))
+            with col2:
+                
+                due_date_val = None
+                due_time_val = None
+                try:
+                    if task.get('due_date'):
+                        parsed = datetime.fromisoformat(task['due_date'])
+                        due_date_val = parsed.date()
+                        due_time_val = parsed.time()
+                except Exception:
+                    pass
+
+                due_date = st.date_input("Due Date", value=due_date_val or datetime.now().date())
+                due_time = st.time_input("Due Time (IST)", value=due_time_val or datetime.now().time())
+
+            new_desc = st.text_area("Description", value=task.get('description', ''))
+            reopen = st.checkbox("Reopen task (set to in_progress)")
+            submit_edit = st.form_submit_button("Save Changes")
+
+            if submit_edit:
+                due_iso = to_ist_timestamp(due_date, due_time)
+                updated_fields = {
+                    'title': new_title,
+                    'description': new_desc,
+                    'due_date': due_iso,
+                    'status': 'in_progress' if reopen else new_status
+                }
+                supabase.table('tasks').update(updated_fields).eq('id', task.get('id')).execute() 
+
+                try:
+                    send_notification(supabase, task.get('assigned_to'), f"✏️ Task '{new_title}' was edited by your manager. Please review.", 'task_edited')
+                except Exception as e:
+                    print(e)
+                    st.write(f"some error: {e}")
+
+                st.success("Task updated successfully.")
+                st.rerun()
+    
+
+
     with st.form("new_task"):
         col1, col2 = st.columns(2)
         with col1:
