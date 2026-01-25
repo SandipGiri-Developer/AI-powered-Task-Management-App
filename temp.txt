@@ -1,2 +1,0 @@
-{'update_id': 27383859, 'message': {'message_id': 15, 'from': {'id': 5035988742, 'is_bot': False, 'first_name': 'Anonymous_hdhdbdjx', 'username': 'SandipGiri_Dev', 'language_code': 'en'}, 'chat': {'id': 5035988742, 'first_name': 'Anonymous_hdhdbdjx', 'username': 'SandipGiri_Dev', 'type': 'private'}, 'date': 1769317351, 'text': 'lets go'}}
-', 'username': 'SandipGiri_Dev', 'language_code': 'en'}, 'chat': {'id': 5035988742, 'first_name': 'Anonymous_hdhdbdjx', 'username': 'SandipGiri_Dev', 'type': 'private'}, 'date': 1769317351, 'text': 'lets go'}}
