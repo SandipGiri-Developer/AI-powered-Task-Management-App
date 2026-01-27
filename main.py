@@ -24,6 +24,11 @@ GEMINI_API_KEY_FLASH = os.getenv("GEMINI_API_KEY_FLASH")
 genai.configure(api_key=GEMINI_API_KEY_FLASH)
 
 
+@app.get("/")
+async def root():
+    return {"status": "ok", "message": "Jayashree Polymers Task Manager API is running"}
+
+
 def send_telegram_message(chat_id: int, text: str) -> bool:
 
     if not TELEGRAM_BOT_TOKEN:
@@ -150,7 +155,7 @@ async def telegram_webhook(req: Request):
         )
         send_telegram_message(
             chat_id=sender_id,
-            text="✅ Task '{deatails['title']}' assigned to {deatails['employee_name'].title()} with deadline {deatails['deadline']}."
+            text=f"✅ Task {deatails['title']} assigned to {deatails['employee_name'].title()} with deadline {deatails['deadline']}."
         )
     except Exception as e:
         print(f"❌ Error parsing task: {str(e)}")

@@ -1,12 +1,11 @@
-import streamlit as st
-from supabase import create_client
-from datetime import datetime, timedelta, timezone
-from .utils import get_ist_now
 import logging
 import os
 from dotenv import load_dotenv
-load_dotenv()
+from supabase import create_client
+from datetime import datetime, timedelta, timezone
+from .utils import get_ist_now
 
+load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -16,8 +15,12 @@ _supabase = None
 def get_db():
     global _supabase
     if _supabase is None:
-        url = os.getenv("SUPABASE_URL") or st.secrets["SUPABASE_URL"]
-        key = os.getenv("SUPABASE_KEY") or st.secrets["SUPABASE_KEY"]
+        url = os.getenv("SUPABASE_URL")
+        key = os.getenv("SUPABASE_KEY")
+        
+        if not url or not key:
+            raise ValueError("SUPABASE_URL and SUPABASE_KEY environment variables are required")
+        
         _supabase = create_client(url, key)
     return _supabase
 
