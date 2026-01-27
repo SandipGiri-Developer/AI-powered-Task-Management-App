@@ -73,7 +73,7 @@ employee_name=<lowercase employee name>
 
 Rules:
 - If no deadline is mentioned, assume 5 PM IST.
-- Deadline format example: 2026-01-20T17:00:00+05:30
+- Deadline format example: 2026-01-20T17:00:00
 - No extra text.
 - 2026 is current year.
 
@@ -81,7 +81,7 @@ e.g. text: "Assign John Doe to complete the financial report by 12 dec 26."
 Expected output:
 title=Complete the financial report
 description=Complete the financial report
-deadline=2026-12-12T17:00:00+05:30
+deadline=2026-12-12T17:00:00
 employee_name=john doe
 
 
@@ -96,7 +96,6 @@ Text:
 def parse_task_output(text: str) -> dict:
     print(f"Raw AI output:\n{text}\n")
     lines = [line.strip() for line in text.splitlines() if "=" in line]
-    
 
     data = {}
     for line in lines:
