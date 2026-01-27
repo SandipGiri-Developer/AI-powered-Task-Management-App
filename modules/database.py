@@ -4,6 +4,9 @@ from datetime import datetime, timedelta, timezone
 from .utils import get_ist_now
 import logging
 import os
+from dotenv import load_dotenv
+load_dotenv()
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -13,8 +16,8 @@ _supabase = None
 def get_db():
     global _supabase
     if _supabase is None:
-        url = st.secrets["SUPABASE_URL"]
-        key = st.secrets["SUPABASE_KEY"]
+        url = os.getenv("SUPABASE_URL") or st.secrets["SUPABASE_URL"]
+        key = os.getenv("SUPABASE_KEY") or st.secrets["SUPABASE_KEY"]
         _supabase = create_client(url, key)
     return _supabase
 
